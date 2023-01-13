@@ -1,0 +1,8 @@
+.col-2{
+  background-color: rgb(141, 141, 246);
+  border-radius: 4px;
+}
+.row{
+  display: flex;
+  justify-content: space-evenly;
+}
