@@ -65,73 +65,141 @@ https://api.openweathermap.org/data/2.5/forecast?lat=57&lon=-2.15&cnt=3&appid={A
 //https://openweathermap.org/forecast5#parameter         // good notes here
 
 
-console.log("#==========================================================================================#\n")
+// console.log("#==========================================================================================#\n")
 
-const currDay = moment().format("DD")
-console.log(currDay);
+// const currDay = moment().format("DD");
+// const currYear = moment().format("YYYY");
+// const currMonth = moment().format("MM");
 
-const returnLimit = 40;
+// console.log("MONTH: ",currMonth);
+// console.log("DAY: ",currDay);
+// console.log("YEAR: ",currYear);
 
-const apitest = `https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&cnt=${returnLimit}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
-function apitestfunc (){
-  fetch(apitest)
-  .then(response => {
-    return response.json()
-  })
-  .then(data => {
-    console.log("returning data from test api call--------\n", data);
-  })
-}
-apitestfunc();
-console.log("#==========================================================================================#\n")
+// const returnLimit = 40;
+
+// const apitest = `https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&cnt=${returnLimit}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
 
 
+// const bruh = {thing1: "brah",thing2:"brah2",thing3:"brah3" };
 
-
-// let currDTValue = "";
-// const fiveDaysOfWeather = [];
-// const apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2";
-
-// // Here's a sample of how you might start the app
-// function getWeatherData(){
-//   fetch(apiUrl)
-//   .then( response => {
+// function apitestfunc (){
+//   fetch(apitest)
+//   .then(response => {
 //     return response.json()
 //   })
-//   .then( data => {
-//     // send the data to the parsing function below
-//     console.log("CONSOLE LOG DATA LINE 79:-----------------------\n",data);
-
-//     parseWeatherData(data.list)
+//   .then(data => {
+//     console.log("returning data from test api call--------\n", data.list);
+//     console.log("okgfnjdfglkjnfdglkf",data.list[1]);
+//     console.log(data.list[1].dt_txt);
+//     console.log(typeof data.list[1].dt_txt);
+    
+//     data.list.forEach()
 //   })
 // }
 
 
-// function parseWeatherData(data){
-//   data.forEach( obj => {
-//     // use moment or dayjs to parse the obj dt variable and get the "real date"
-//     const dateObj = new moment().day()
-//     console.log(dateObj); // get just day value 
+// apitestfunc();
+// console.log("#==========================================================================================#\n")
 
-//     // from this dateObj, use moment or js to get the date it represents. ***This is for you to do ***.
-//     const currDay = "13"; //loggin what day were on to only pull one record from that.
 
-//     // if the current dt value differs from the global variable, AND we don't have data in our array for this day, 
-//     // we must be on a new day
-//     if( currDay !== currDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt === obj.dt ) ){
-//       currDTValue = currDay // update the global variable so we don't use this day again
 
-//       // if JS is still in this function, then we must be encountering this dt object for the first time. So the obj variable used in the forEach() must be referring to the firt hour block for this day. get the first record (the obj variable above) and use that for the weather for this day
-//       fiveDaysOfWeather.push(obj)
-//     }
-//   })
 
-//   // Once the code gets here, we should have one weather object per day.
-//   console.log("FIVE DAYS OF WEATHER OBJ",fiveDaysOfWeather)
-// }
+let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
+let newcurrDTValue = currDTValue.split(" ")[0]
+const fiveDaysOfWeather = [];
 
-// getWeatherData();
-// getWeatherData();
+const apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&cnt=40&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
+
+// Here's a sample of how you might start the app
+function getWeatherData(){
+  fetch(apiUrl)
+  .then( response => {
+    return response.json()
+  })
+  .then( data => {
+    // send the data to the parsing function below
+    console.log("API was called succesfully...");
+
+    parseWeatherData(data.list)
+  })
+}
+
+function parseWeatherData(data){
+  data.forEach( obj => {
+    // use moment or dayjs to parse the obj dt variable and get the "real date"
+    const dateObj = moment(obj.dt_txt)
+    const currday = dateObj._i; 
+    const newCurrDay = currday.split(" ")[0];
+
+    // if the current dt value differs from the global variable, AND we don't have data in our array for this day, 
+    // we must be on a new day
+    if( newCurrDay !== newcurrDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt_txt.split(" ")[0] === obj.dt_txt.split(" ")[0] ) ){
+      currDTValue = newCurrDay
+      fiveDaysOfWeather.push(obj)
+  }
+  })
+
+  //Once the code gets here, we should have one weather object per day.
+  console.log("FIVE DAYS OF WEATHER OBJ",fiveDaysOfWeather)
+}
+
+getWeatherData();
+/* const apiKey = '04133e2124a97e14dd84749c9f4ac83ff'
+const apiLink = "https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&appid=04133e2124a97e14dd84749c9f4ac83f&units=imperial"
+const mainContainer = document.getElementById('page')
+let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
+let newcurrDTValue = currDTValue.split(" ")[0]
+const fiveDaysOfWeather = []
+
+function weatherDataCollection(){
+  fetch(apiLink)
+    .then (response =>{
+      //console.log(response);
+      return response.json();
+    })
+    .then(data => {
+      //console.log(data);
+      parseWeatherData(data.list)
+    })
+}
+
+function parseWeatherData(data){
+  //console.log(data)
+  data.forEach(obj => {
+    const dateObj = moment(obj.dt_txt)
+    const currday = dateObj._i; 
+    const newCurrDay = currday.split(" ")[0];
+    //console.log(dateObj)
+    //console.log(currday.split(" "))
+    //console.log(currDTValue)
+
+    console.log(newCurrDay)
+     if( newCurrDay !== newcurrDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt_txt.split(" ")[0] === obj.dt_txt.split(" ")[0] ) ){
+        currDTValue = newCurrDay
+        fiveDaysOfWeather.push(obj)
+    }
+  })
+  addDataToPage(fiveDaysOfWeather)
+}
+
+function addDataToPage(){
+
+}
+
+weatherDataCollection();
+*/
+
+
+
+
+
+
+
+
+
+
+
+
 
 // var bruh = 
 //   {
