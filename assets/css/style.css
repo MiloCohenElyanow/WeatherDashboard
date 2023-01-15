@@ -1,8 +1,45 @@
-.col-2{
-  background-color: rgb(141, 141, 246);
-  border-radius: 4px;
+
+
+
+.header{
+  background-color: grey;
 }
-.row{
+
+.container-fluid{
+  background-color:grey ;
+}
+
+
+.main{
   display: flex;
+  width:100vw;
+  height: auto;
+  background-color: lightgrey;
+  justify-content: row;
+}
+
+.aside1{
+  width: 25vw;
+  height: 600px;
+  background-color: lavender;
+  align-items: center;
+}
+
+.weatherCont{
+  width:60vw;
+  height:600px;
+  background-color: rgb(52, 52, 52);
+}
+
+.cardcontainer{
+  display: flex;
+  align-items: center;
   justify-content: space-evenly;
+}
+
+.currDayWeather{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 }

@@ -37,4 +37,3 @@ function parseWeatherData(data){
 
 getWeatherData();
 
-
