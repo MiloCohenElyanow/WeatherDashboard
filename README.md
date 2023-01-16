@@ -21,3 +21,13 @@ to find reliable weather information for wherever you need.
 -[Moment.js](https://momentjs.com/)
 
 ## Preview
+
+![](https://raw.githubusercontent.com/whotf1/WeatherDashboard/main/assets/other/WeatherDash_preview.gif)
+
+## Usage
+
+-You can view the sourcecode and open this website locally by downloading the sourcecode from github [HERE](https://github.com/whotf1/WeatherDashboard)
+
+-you can also view the live website without downloading anything [HERE](https://whotf1.github.io/WeatherDashboard/)
+
+-This application will remain unliscensed and free to use in any way anyone sees fit for aslong as this project remains on Github!

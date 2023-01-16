@@ -1,11 +1,4 @@
-
-
-
-//http://api.openweathermap.org/geo/1.0/direct?q={city name},001&appid={API key}
-
-
-
-
+//setting main function to work with Jquery
 $(function () {
   var fiveDaysOfWeather = [];
 
@@ -27,19 +20,15 @@ $(function () {
   function srcButtonClick(returnCity,){ // getting city name from src button 
     cityName = $("#citySrcField").val()
     returnCity = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
-    console.log("returning return city",returnCity) // DELETE LATER
     fetch(returnCity) //passing city name from src bar to api geocoder to get lat and long for that city name. this tends to work better and far more consistently than passing a city name directly to the api
     .then(response => {
       return response.json()
     })
     .then(data => {
-      console.log("data retrieved from returncity fetch: ", data); // parsing lattitude and longitude from api geocoder.
       var tempLat = data[0].lat;
       var tempLon = data[0].lon;
-      console.log("lat and long: ", tempLat,", ", tempLon); // DELETE LATER
       var forecastfromsearch = `https://api.openweathermap.org/data/2.5/forecast?lat=${tempLat}&lon=${tempLon}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
-      apiUrl = forecastfromsearch;
-      console.log("SRC API KDLNFLSKDNFDLKSF",apiUrl); // DELETE LATER
+      apiUrl = forecastfromsearch; // resetting the api urls this way seemed to be the only way I could get them to work properly, its certainly not pretty but it gets the job done
       getWeatherData(apiUrl);
       var newtodayweatherurl = `https://api.openweathermap.org/data/2.5/weather?lat=${tempLat}&lon=${tempLon}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`; // setting new todayweatherurl for when gettodaysweather is called from the button click.
       todayWeatherUrl = newtodayweatherurl;
@@ -49,13 +38,12 @@ $(function () {
   function getTodaysWeather(){
     fetch(todayWeatherUrl)
     .then(response => {
-      return response.json()
+      return response.json() // returning response parsed with json and sending to next .then
     })
     .then(data => {
-      console.log(data);
       var thisthing = $("#todayWeather")
       $(thisthing).children().first().text("weather for "+data.name+" Today")
-      $("#weatherImg-main").attr("src" ,`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`)
+      $("#weatherImg-main").attr("src" ,`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`) // all of these just write data recieved to the page with jquery dom tree!
       $(thisthing).children().first().next().next().text("feels like: "+ data.main.feels_like+"°F")
       $(thisthing).children().first().next().next().next().text("Humidity: "+ data.main.humidity)
       $(thisthing).children().first().next().next().next().next().text("Wind:  "+ data.wind.speed+" @ "+data.wind.deg+"°");
@@ -71,7 +59,7 @@ $(function () {
     })
     .then( data => {
       // send the data to the parsing function below
-      console.log("API was called succesfully..."); //just a easy way to check if the api was called and returned info correctly
+      console.log("API was called succesfully..."); //leaving this in, so if anyone is bug checking the functonality is readily available and problems can be solved a little easier.
       parseWeatherData(data.list)
     })
   }
@@ -96,7 +84,7 @@ $(function () {
     var arr1 = ["#date-1","#date-2","#date-3","#date-4","#date-5"]; // making array with the parent elements to make things a bit easier for my eyes and my understanding with the dom tree
     for(var i=0; i<arr1.length;i++){
       $(arr1[i]).text(fiveDaysOfWeather[i].dt_txt.substring(0,10));
-      $(arr1[i]).siblings("p").first().text("feels like: " + fiveDaysOfWeather[i].main.feels_like+"°F"); // writing stuff returning from the api to each individual html element, just seems easier.
+      $(arr1[i]).siblings("p").first().text("feels like: " + fiveDaysOfWeather[i].main.feels_like+"°F"); // writing stuff returning from the api to each individual html element, just seems easier. Definatly not pretty code but it gets the job done consistntly
       $(arr1[i]).siblings("p").first().next().text("Humidity: " + fiveDaysOfWeather[i].main.humidity);
       $(arr1[i]).siblings("p").first().next().next().text("wind: " + fiveDaysOfWeather[i].wind.speed + "MPH @" + fiveDaysOfWeather[i].wind.deg + "°")
       $(arr1[i]).siblings("p").first().next().next().next().text("" + fiveDaysOfWeather[i].weather[0].description);
