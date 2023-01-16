@@ -5,16 +5,16 @@ $(function () {
   let newcurrDTValue = currDTValue.split(" ")[0];
 
 
-  let apiUrl = "api.openweathermap.org/data/2.5/forecast?q=Minneapolis&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
-  let todayWeatherUrl = `api.openweathermap.org/data/2.5/weather?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
-  let newUrl = "api.openweathermap.org/data/2.5/forecast?q=miami&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
+  let apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=Minneapolis&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
+  let todayWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
+  let newUrl = "https://api.openweathermap.org/data/2.5/forecast?q=miami&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
   let cityName = "";
-  let returnCity = `api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
+  let returnCity = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
 
   $("#srcButton").click(srcButtonClick);
   function srcButtonClick(returnCity,){ // getting city name from src button 
     cityName = $("#citySrcField").val()
-    returnCity = `api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
+    returnCity = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
     fetch(returnCity) //passing city name from src bar to api geocoder to get lat and long for that city name. this tends to work better and far more consistently than passing a city name directly to the api
     .then(response => {
       return response.json()
@@ -22,10 +22,10 @@ $(function () {
     .then(data => {
       var tempLat = data[0].lat;
       var tempLon = data[0].lon;
-      var forecastfromsearch = `api.openweathermap.org/data/2.5/forecast?lat=${tempLat}&lon=${tempLon}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
+      var forecastfromsearch = `https://api.openweathermap.org/data/2.5/forecast?lat=${tempLat}&lon=${tempLon}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
       apiUrl = forecastfromsearch; // resetting the api urls this way seemed to be the only way I could get them to work properly, its certainly not pretty but it gets the job done
       getWeatherData(apiUrl);
-      var newtodayweatherurl = `api.openweathermap.org/data/2.5/weather?lat=${tempLat}&lon=${tempLon}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`; // setting new todayweatherurl for when gettodaysweather is called from the button click.
+      var newtodayweatherurl = `https://api.openweathermap.org/data/2.5/weather?lat=${tempLat}&lon=${tempLon}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`; // setting new todayweatherurl for when gettodaysweather is called from the button click.
       todayWeatherUrl = newtodayweatherurl;
       getTodaysWeather(todayWeatherUrl)
     })
