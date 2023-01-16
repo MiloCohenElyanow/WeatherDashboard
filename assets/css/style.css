@@ -49,10 +49,14 @@
 }
 #currDayWeather{
   display: flex;
+  padding-bottom: 35px;
 }
-.hide{
-  display: hide;
-}
-#srcButtons{
-  display: hide;
+
+
+@media screen and (max-width: 1281px) {
+  .cardcontainer{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 }

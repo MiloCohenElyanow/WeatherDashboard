@@ -54,7 +54,7 @@ $(function () {
     .then(data => {
       console.log(data);
       var thisthing = $("#todayWeather")
-      $(thisthing).children().first().text("weather for "+data.sys.country+" Today")
+      $(thisthing).children().first().text("weather for "+data.name+" Today")
       $("#weatherImg-main").attr("src" ,`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`)
       $(thisthing).children().first().next().next().text("feels like: "+ data.main.feels_like+"°F")
       $(thisthing).children().first().next().next().next().text("Humidity: "+ data.main.humidity)
