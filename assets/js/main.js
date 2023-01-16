@@ -15,8 +15,32 @@ $(function () {
   let newcurrDTValue = currDTValue.split(" ")[0]
 
 
-  const apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&cnt=40&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
+  let apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&cnt=40&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
   const todayWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial"
+
+
+
+
+  $("#srcButton").click(srcButtonClick);
+  function srcButtonClick(){
+    var currSrcField = $("#citySrcField").val()
+    apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${currSrcField}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
+    fetch(apiUrl)
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      console.log("Data from new city src",data);
+      console.log("going to parseweatherdata with new city src")
+      getWeatherData(data.list);
+    })
+
+    
+  }
+
+
+
+
 
   function getTodaysWeather(){
     fetch(todayWeatherUrl)
@@ -36,13 +60,7 @@ $(function () {
     })
   }
 
-
-
-
-
-
-
-  function getWeatherData(){
+  function getWeatherData(apiUrl){
     fetch(apiUrl)
     .then( response => {
       return response.json()
@@ -51,14 +69,11 @@ $(function () {
       // send the data to the parsing function below
       console.log("API was called succesfully..."); //just a easy way to check if the api was called and returned info correctly
       parseWeatherData(data.list)
-      return fiveDaysOfWeather
     })
   }
   function parseWeatherData(data){
     data.forEach( obj => {
       // use moment or dayjs to parse the obj dt variable and get the "real date"
-      var y = 0
-      y++;
       const dateObj = moment(obj.dt_txt)
       const currday = dateObj._i; 
       const newCurrDay = currday.split(" ")[0];
@@ -67,6 +82,7 @@ $(function () {
         currDTValue = newCurrDay
         console.log(obj)
         fiveDaysOfWeather.push(obj);
+        console.log(fiveDaysOfWeather);
     }
     });
     writeContent(fiveDaysOfWeather);
@@ -74,10 +90,8 @@ $(function () {
 
   function writeContent (){
     getTodaysWeather();
-    console.log("THIS HERE THIS",fiveDaysOfWeather);
     var arr1 = ["#date-1","#date-2","#date-3","#date-4","#date-5"]; // making array with the parent elements to make things a bit easier for my eyes and my understanding with the dom tree
     for(var i=0; i<arr1.length;i++){
-
       $(arr1[i]).text(fiveDaysOfWeather[i].dt_txt.substring(0,10));
       $(arr1[i]).siblings("p").first().text("feels like: " + fiveDaysOfWeather[i].main.feels_like+"°F"); // writing stuff returning from the api to each individual html element, just seems easier.
       $(arr1[i]).siblings("p").first().next().text("Humidity: " + fiveDaysOfWeather[i].main.humidity);

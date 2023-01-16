@@ -22,7 +22,7 @@
   width: 25vw;
   height: 800px;
   background-color: lavender;
-  align-items: center;
+  align-items: left;
 }
 
 .weatherCont{
@@ -44,4 +44,10 @@
 }
 #currDayWeather{
   display: flex;
+}
+.hide{
+  display: hide;
+}
+#srcButtons{
+  display: hide;
 }
