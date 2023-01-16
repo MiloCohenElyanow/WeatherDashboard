@@ -1,18 +1,13 @@
 //setting main function to work with Jquery
 $(function () {
   var fiveDaysOfWeather = [];
-
-
-
   let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
   let newcurrDTValue = currDTValue.split(" ")[0];
 
 
   let apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=Minneapolis&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
   let todayWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
-
   let newUrl = "https://api.openweathermap.org/data/2.5/forecast?q=miami&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
-
   let cityName = "";
   let returnCity = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
 
