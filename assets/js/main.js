@@ -1,7 +1,7 @@
 
 
 
-
+//http://api.openweathermap.org/geo/1.0/direct?q={city name},001&appid={API key}
 
 
 
@@ -12,36 +12,40 @@ $(function () {
 
 
   let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
-  let newcurrDTValue = currDTValue.split(" ")[0]
+  let newcurrDTValue = currDTValue.split(" ")[0];
 
 
-  let apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&cnt=40&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
-  const todayWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial"
+  let apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=Minneapolis&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
+  let todayWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
 
+  let newUrl = "https://api.openweathermap.org/data/2.5/forecast?q=miami&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
 
-
+  let cityName = "";
+  let returnCity = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
 
   $("#srcButton").click(srcButtonClick);
-  function srcButtonClick(){
-    var currSrcField = $("#citySrcField").val()
-    apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${currSrcField}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
-    fetch(apiUrl)
+  function srcButtonClick(returnCity,){ // getting city name from src button 
+    cityName = $("#citySrcField").val()
+    returnCity = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
+    console.log("returning return city",returnCity) // DELETE LATER
+    fetch(returnCity) //passing city name from src bar to api geocoder to get lat and long for that city name. this tends to work better and far more consistently than passing a city name directly to the api
     .then(response => {
       return response.json()
     })
     .then(data => {
-      console.log("Data from new city src",data);
-      console.log("going to parseweatherdata with new city src")
-      getWeatherData(data.list);
+      console.log("data retrieved from returncity fetch: ", data); // parsing lattitude and longitude from api geocoder.
+      var tempLat = data[0].lat;
+      var tempLon = data[0].lon;
+      console.log("lat and long: ", tempLat,", ", tempLon); // DELETE LATER
+      var forecastfromsearch = `https://api.openweathermap.org/data/2.5/forecast?lat=${tempLat}&lon=${tempLon}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
+      apiUrl = forecastfromsearch;
+      console.log("SRC API KDLNFLSKDNFDLKSF",apiUrl); // DELETE LATER
+      getWeatherData(apiUrl);
+      var newtodayweatherurl = `https://api.openweathermap.org/data/2.5/weather?lat=${tempLat}&lon=${tempLon}&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`; // setting new todayweatherurl for when gettodaysweather is called from the button click.
+      todayWeatherUrl = newtodayweatherurl;
+      getTodaysWeather(todayWeatherUrl)
     })
-
-    
   }
-
-
-
-
-
   function getTodaysWeather(){
     fetch(todayWeatherUrl)
     .then(response => {
@@ -72,6 +76,7 @@ $(function () {
     })
   }
   function parseWeatherData(data){
+    fiveDaysOfWeather = [] // clearing array before it is written to again
     data.forEach( obj => {
       // use moment or dayjs to parse the obj dt variable and get the "real date"
       const dateObj = moment(obj.dt_txt)
@@ -80,9 +85,7 @@ $(function () {
       // some if this if statement was given to us by gary some was added in by me to work easier for how I understand it
       if( newCurrDay !== newcurrDTValue && fiveDaysOfWeather.length < 5 && !fiveDaysOfWeather.find( day => day.dt_txt.split(" ")[0] === obj.dt_txt.split(" ")[0] ) ){
         currDTValue = newCurrDay
-        console.log(obj)
         fiveDaysOfWeather.push(obj);
-        console.log(fiveDaysOfWeather);
     }
     });
     writeContent(fiveDaysOfWeather);
@@ -100,5 +103,5 @@ $(function () {
       $(`#weatherImg-${i}`).attr("src" ,`https://openweathermap.org/img/wn/${fiveDaysOfWeather[i].weather[0].icon}@2x.png` )
     }
   }
-  getWeatherData();
+  getWeatherData(apiUrl);
 });

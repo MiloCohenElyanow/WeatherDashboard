@@ -9,19 +9,24 @@
   background-color:grey ;
 }
 
-
+.card{
+  background-color: #a5a2ba;
+}
+.card-body{
+  background-color: #a5a2ba;
+}
 .main{
   display: flex;
   width:100vw;
   height: auto;
-  background-color: lightgrey;
+  background-color: rgb(126, 128, 141);
   justify-content: row;
 }
 
 .aside1{
   width: 25vw;
   height: 800px;
-  background-color: lavender;
+  background-color: rgb(159, 159, 170);
   align-items: left;
 }
 
