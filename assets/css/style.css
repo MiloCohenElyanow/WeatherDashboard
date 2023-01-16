@@ -20,15 +20,15 @@
 
 .aside1{
   width: 25vw;
-  height: 600px;
+  height: 800px;
   background-color: lavender;
   align-items: center;
 }
 
 .weatherCont{
   width:60vw;
-  height:600px;
-  background-color: rgb(52, 52, 52);
+  height:800px;
+  background-color: rgb(49, 49, 49);
 }
 
 .cardcontainer{
@@ -41,5 +41,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
+}
+#currDayWeather{
+  display: flex;
 }

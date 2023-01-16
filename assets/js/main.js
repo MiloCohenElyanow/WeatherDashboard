@@ -9,13 +9,38 @@
 $(function () {
   var fiveDaysOfWeather = [];
 
-  var weatherInfo =[];
+
 
   let currDTValue = moment().format("YYYY-MM-DD hh:mm:ss");
   let newcurrDTValue = currDTValue.split(" ")[0]
 
 
   const apiUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=44.9537&lon=93.0900&cnt=40&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
+  const todayWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial"
+
+  function getTodaysWeather(){
+    fetch(todayWeatherUrl)
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      console.log(data);
+      var thisthing = $("#todayWeather")
+      $(thisthing).children().first().text("weather for "+data.sys.country+" Today")
+      $("#weatherImg-main").attr("src" ,`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`)
+      $(thisthing).children().first().next().next().text("feels like: "+ data.main.feels_like+"°F")
+      $(thisthing).children().first().next().next().next().text("Humidity: "+ data.main.humidity)
+      $(thisthing).children().first().next().next().next().next().text("Wind:  "+ data.wind.speed+" @ "+data.wind.deg+"°");
+      $(thisthing).children().first().next().next().next().next().next().text(""+data.weather[0].description);
+
+    })
+  }
+
+
+
+
+
+
 
   function getWeatherData(){
     fetch(apiUrl)
@@ -48,14 +73,17 @@ $(function () {
   }
 
   function writeContent (){
+    getTodaysWeather();
     console.log("THIS HERE THIS",fiveDaysOfWeather);
-    var arr1 = ["#date-1","#date-2","#date-3","#date-4","#date-5"];
+    var arr1 = ["#date-1","#date-2","#date-3","#date-4","#date-5"]; // making array with the parent elements to make things a bit easier for my eyes and my understanding with the dom tree
     for(var i=0; i<arr1.length;i++){
-      $(arr1[i]).text(fiveDaysOfWeather[i].dt_txt.substring(0,10));
-      $(arr1[i]).siblings("p").first().text("feels like: " + fiveDaysOfWeather[i].main.feels_like);
-      $(arr1[i]).siblings("p").first().next().text("Humidity: " + fiveDaysOfWeather[i].main.humidity);
-      $(arr1[i]).siblings("p").first().next().next().text("" + fiveDaysOfWeather[i].weather[0].description);
 
+      $(arr1[i]).text(fiveDaysOfWeather[i].dt_txt.substring(0,10));
+      $(arr1[i]).siblings("p").first().text("feels like: " + fiveDaysOfWeather[i].main.feels_like+"°F"); // writing stuff returning from the api to each individual html element, just seems easier.
+      $(arr1[i]).siblings("p").first().next().text("Humidity: " + fiveDaysOfWeather[i].main.humidity);
+      $(arr1[i]).siblings("p").first().next().next().text("wind: " + fiveDaysOfWeather[i].wind.speed + "MPH @" + fiveDaysOfWeather[i].wind.deg + "°")
+      $(arr1[i]).siblings("p").first().next().next().next().text("" + fiveDaysOfWeather[i].weather[0].description);
+      $(`#weatherImg-${i}`).attr("src" ,`https://openweathermap.org/img/wn/${fiveDaysOfWeather[i].weather[0].icon}@2x.png` )
     }
   }
   getWeatherData();
