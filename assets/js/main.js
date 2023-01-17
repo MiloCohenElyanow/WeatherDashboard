@@ -14,12 +14,12 @@ $(function () {
   let newUrl = "https://api.openweathermap.org/data/2.5/forecast?q=miami&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
 
   let cityName = "";
-  let returnCity = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
+  let returnCity = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
 
   $("#srcButton").click(srcButtonClick);
   function srcButtonClick(returnCity,){ // getting city name from src button 
     cityName = $("#citySrcField").val()
-    returnCity = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
+    returnCity = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
     fetch(returnCity) //passing city name from src bar to api geocoder to get lat and long for that city name. this tends to work better and far more consistently than passing a city name directly to the api
     .then(response => {
       return response.json()
