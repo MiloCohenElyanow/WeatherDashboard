@@ -17,8 +17,8 @@ $(function () {
 
   var arrCityNames = ['Minneapolis',]; // setting array to have something by default to not run into error from reading data from empty errays: TypeError
   localStorage.getItem("cities", JSON.stringify(arrCityNames)) //pulling array from local storage to be used globaly
-
   createCityButtons();
+  makeApiCall('minneapolis')
 // call when page loads and when a new city is added
  function createCityButtons(){
     // clear out all the existing buttons
