@@ -13,26 +13,29 @@ $(function () {
   let cityName = "";
   let returnCity = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
 
+  /*
+  var arrCityNames = ['Minneapolis'];
+  localStorage.setItem("cities", arrCityNames);
+  */
 
-
-  var arrCityNames = ['Minneapolis',]; // setting array to have something by default to not run into error from reading data from empty errays: TypeError
-  localStorage.getItem("cities", JSON.stringify(arrCityNames)) //pulling array from local storage to be used globaly
+  const arrCityNames = JSON.parse(localStorage.getItem("cities")) || []
   createCityButtons();
-  makeApiCall('minneapolis')
+  // setting array to have something by default to not run into error from reading data from empty errays: TypeError
+//pulling array from local storage to be used globaly
+ makeApiCall('minneapolis')
 // call when page loads and when a new city is added
- function createCityButtons(){
-    // clear out all the existing buttons
-    arrCityNames = JSON.parse(localStorage.getItem('cities')) // THIS CODE FUCKING WORKS DONT FUCK WITH IT! THE PROBBLEM IS ITS READING AN ARRAY AND GETTING THE INDEX WITH FOR EACH BUT THERE IS NOTHING IN THAT ARRAY WHEN LOADING THE PAGE WITH NOTHING IN THE LOCAL STORAGE... FIGURE THAT PART OUT FUCK YOU
-    console.log(arrCityNames);
+function createCityButtons(){
+  if( arrCityNames && arrCityNames.length ){
+    console.log(arrCityNames)
     $("#srcButtons").children().empty(); 
     // loop through global cities array and create one button per city
-        arrCityNames.forEach((city, index) => {
+    arrCityNames.forEach((city) => {
         // create btn 
-        console.log(index);
-        var premadeButton = `<button class="btn btn-secondary cityButton" type="button">${city}</button>`
-        $("#srcButtons").append(premadeButton);
-        });
+      var premadeButton = `<button class="btn btn-secondary cityButton" type="button">${city}</button>`
+       $("#srcButtons").append(premadeButton);
+    });
   }
+}
 
   function updateCityNames(newCity){
     if(arrCityNames.includes(newCity) != true){
