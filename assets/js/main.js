@@ -10,16 +10,60 @@ $(function () {
 
   let apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=Minneapolis&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
   let todayWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=44.9537&lon=93.0900&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
-
-  let newUrl = "https://api.openweathermap.org/data/2.5/forecast?q=miami&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial";
-
   let cityName = "";
   let returnCity = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`;
 
+
+
+  var arrCityNames = ['Minneapolis',]; // setting array to have something by default to not run into error from reading data from empty errays: TypeError
+  localStorage.getItem("cities", JSON.stringify(arrCityNames)) //pulling array from local storage to be used globaly
+
+  createCityButtons();
+// call when page loads and when a new city is added
+ function createCityButtons(){
+    // clear out all the existing buttons
+    arrCityNames = JSON.parse(localStorage.getItem('cities')) // THIS CODE FUCKING WORKS DONT FUCK WITH IT! THE PROBBLEM IS ITS READING AN ARRAY AND GETTING THE INDEX WITH FOR EACH BUT THERE IS NOTHING IN THAT ARRAY WHEN LOADING THE PAGE WITH NOTHING IN THE LOCAL STORAGE... FIGURE THAT PART OUT FUCK YOU
+    console.log(arrCityNames);
+    $("#srcButtons").children().empty(); 
+    // loop through global cities array and create one button per city
+        arrCityNames.forEach((city, index) => {
+        // create btn 
+        console.log(index);
+        var premadeButton = `<button class="btn btn-secondary cityButton" type="button">${city}</button>`
+        $("#srcButtons").append(premadeButton);
+        });
+  }
+
+  function updateCityNames(newCity){
+    if(arrCityNames.includes(newCity) != true){
+      arrCityNames.push(newCity);
+      localStorage.setItem("cities", JSON.stringify(arrCityNames))
+      console.log(arrCityNames)
+      createCityButtons(arrCityNames);
+  }
+}
+
+
+
+ // user clicks any of the saved or newly made buttons under search field
+  $("#srcButtons").on('click', '.cityButton',function(){
+    var buttonText = $(this).text();
+    makeApiCall(buttonText)
+    
+  })
+
   $("#srcButton").click(srcButtonClick);
-  function srcButtonClick(returnCity,){ // getting city name from src button 
+  // user clicks go button
+  function srcButtonClick(){ 
+    // getting city name from src button 
     cityName = $("#citySrcField").val()
-    returnCity = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
+    updateCityNames(cityName)
+    // make api call
+    makeApiCall(cityName)
+  }
+
+  function makeApiCall(city){
+    returnCity = `https://api.openweathermap.org/geo/1.0/direct?q=${city},001&appid=2418d1b1a7602fe4aa1d23d0348d81e2&units=imperial`
     fetch(returnCity) //passing city name from src bar to api geocoder to get lat and long for that city name. this tends to work better and far more consistently than passing a city name directly to the api
     .then(response => {
       return response.json()
@@ -35,6 +79,8 @@ $(function () {
       getTodaysWeather(todayWeatherUrl)
     })
   }
+
+
   function getTodaysWeather(){
     fetch(todayWeatherUrl)
     .then(response => {
@@ -91,5 +137,4 @@ $(function () {
       $(`#weatherImg-${i}`).attr("src" ,`https://openweathermap.org/img/wn/${fiveDaysOfWeather[i].weather[0].icon}@2x.png` )
     }
   }
-  getWeatherData(apiUrl);
 });
